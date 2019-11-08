@@ -8,12 +8,12 @@
 # listener. This is not intended to be used except for delivering
 # error messages.
 resource "aws_lb_target_group" "default" {
-  name = "${var.name}"
+  name = var.name
 
-  port     = "80"
+  port     = 80
   protocol = "HTTP"
 
   target_type = "ip"
-  vpc_id      = "${data.aws_vpc.selected.id}"
-  tags        = "${merge(map("Name", var.name), var.tags)}"
+  vpc_id      = data.aws_vpc.selected.id
+  tags        = merge({ Name = var.name }, var.tags)
 }
