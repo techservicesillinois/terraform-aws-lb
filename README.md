@@ -1,5 +1,7 @@
 # lb
 
+[![Build Status](https://drone.techservices.illinois.edu/api/badges/techservicesillinois/terraform-aws-lb/status.svg)](https://drone.techservices.illinois.edu/techservicesillinois/terraform-aws-lb)
+
 Provides an Application Load Balancer.
 
 Example Usage
@@ -8,7 +10,7 @@ Example Usage
 ### Public load balancer
 ```hcl
 module "lb_name" {
-  source = "git@github.com:cites-illinois/as-aws-modules//lb"
+  source = "git@github.com:techservicesillinois/terraform-aws-lb"
 
   name = "lb_name"
   tier = "public"
@@ -27,11 +29,11 @@ module "lb_name" {
 
   ports = [
     {
-      port             = "443"
+      port             = 443
       protocol         = "HTTPS" 
     },
     {
-      port             = "80"
+      port             = 80
       protocol         = "HTTP" 
     }    
   ]
@@ -44,10 +46,10 @@ module "lb_name" {
 ### Private load balancer
 ```hcl
 module "lb_name" {
-  source = "git@github.com:cites-illinois/as-aws-modules//lb"
+  source = "git@github.com:techservicesillinois/terraform-aws-lb"
 
   name     = "lb_name"
-  internal = "true"
+  internal = true
   
   tier     = "nat"
   vpc      = "vpc_name"
