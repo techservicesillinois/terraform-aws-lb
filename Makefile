@@ -17,10 +17,10 @@ test: $(TESTDIRS)
 $(TESTDIRS):
 	terraform validate -check-variables=false $@
 
-behave:
+behave: build
 	docker run -it -v $(HOME)/.aws:/root/.aws:ro --rm $(CONTAINER)
 
-debug:
+debug: build
 	docker run -it -v $(HOME)/.aws:/root/.aws:ro --rm --entrypoint bash $(CONTAINER)
 
 build:
