@@ -55,7 +55,7 @@ variable "enable_http2" {
 
 variable "ip_address_type" {
   description = "The type of IP addresses used by the subnets for your load balancer. (i.e., ipv4 or dualstack)"
-  default     = ""
+  default     = "ipv4"
 }
 
 variable "tags" {
