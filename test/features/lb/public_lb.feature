@@ -4,11 +4,12 @@ Feature: Test different tfvars configurations for the lb module with a public ti
     Background: Initialize testing for lb module with a public tier.
         
         Given terraform module 'lb'
-            | key   | value                     |
-            #-------|---------------------------|
-            | name  | "test-lb"                 |
-            | vpc   | "techservicesastest2-vpc" |
-            | tier  | "public"                  |
+            | key             | value                     |
+            #-----------------|---------------------------|
+            | name            | "test-lb"                 |
+            | vpc             | "techservicesastest2-vpc" |
+            | tier            | "public"                  |
+        
         Given terraform list 'ports'
         Given terraform append map to 'ports' list
             | key      | value   |
@@ -46,10 +47,10 @@ Feature: Test different tfvars configurations for the lb module with a public ti
             | action | resource                | name        | count |
             #--------|-------------------------|-------------|-------|
             | create | aws_lb                  | default     |       |
-            |        | aws_lb_listener         | default     | 2     |
+            |        | aws_lb_listener         | default     |   2   |
             |        | aws_lb_target_group     | default     |       |
             |        | aws_security_group      | default     |       |
-            |        | aws_security_group_rule | internet_in | 2     |
+            |        | aws_security_group_rule | internet_in |   2   |
             |        | aws_security_group_rule | allow_icmp  |       |
     
     
@@ -148,9 +149,9 @@ Feature: Test different tfvars configurations for the lb module with a public ti
             |        | aws_security_group_rule | allow_icmp |       |
         
         Then terraform resource 'aws_lb' 'default' has changed attributes
-            | attr     | value |
-            #----------|-------|
-            | internal | true  |
+            | attr     | value         |
+            #----------|---------------|
+            | internal | ${bool:True}  |
     
     
     Scenario Outline: Changing default values for optional variables
@@ -189,9 +190,9 @@ Feature: Test different tfvars configurations for the lb module with a public ti
         Then terraform resource 'aws_lb' 'default' has changed attributes
             | attr                       | value             |
             #----------------------------|-------------------|
-            | enable_deletion_protection | true              |
-            | enable_http2               | false             |
-            | idle_timeout               | 100               |
+            | enable_deletion_protection | ${bool:True}              |
+            | enable_http2               | ${bool:False}             |
+            | idle_timeout               | ${int:100}               |
             | ip_address_type            | <ip_address_type> |
         
         Examples: Different ip address types
@@ -199,4 +200,3 @@ Feature: Test different tfvars configurations for the lb module with a public ti
             #-----------------|
             | dualstack       |
             | ipv4            |
-            
