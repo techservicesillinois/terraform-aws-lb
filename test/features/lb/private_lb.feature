@@ -4,12 +4,12 @@ Feature: Test a basic tfvars configuration for the lb module with a private tier
     Scenario: Initialize testing for lb module with a private tier.
         
         Given terraform module 'lb'
-            | key      | value                     |
-            #----------|---------------------------|
-            | name     | "test-lb"                 |
-            | vpc      | "techservicesastest2-vpc" |
-            | tier     | "private"                 |
-            | internal | "true"                    |
+            | key             | value                     |
+            #-----------------|---------------------------|
+            | name            | "test-lb"                 |
+            | vpc             | "techservicesastest2-vpc" |
+            | tier            | "private"                 |
+            | internal        | "true"                    |
 
         Given terraform list 'ports'
         Given terraform append map to 'ports' list
@@ -33,6 +33,4 @@ Feature: Test a basic tfvars configuration for the lb module with a private tier
         Then terraform resource 'aws_lb' 'default' has changed attributes
             | attr     | value |
             #----------|-------|
-            | internal | true  |
-    
-    
+            | internal | ${bool:true}  |
