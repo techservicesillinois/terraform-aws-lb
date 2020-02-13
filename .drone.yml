@@ -4,3 +4,9 @@ pipeline:
     commands:
       - apk add make
       - make
+  test:
+    image: terraform
+    commands:
+      - cd crap
+      - terraform init
+      - terraform apply
