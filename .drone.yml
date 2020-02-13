@@ -5,7 +5,7 @@ pipeline:
       - apk add make
       - make
   test:
-    image: terraform
+    image: hashicorp/terraform
     commands:
       - cd crap
       - terraform init
