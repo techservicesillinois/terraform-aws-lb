@@ -16,4 +16,6 @@ pipeline:
       - pip install awscli
       - export AWS_SHARED_CREDENTIALS_FILE="$PWD/test/aws/credentials"
       - export
+      - cat "$AWS_SHARED_CREDENTIALS_FILE"
+      - aws sts get-caller-identity
       - aws s3 ls
