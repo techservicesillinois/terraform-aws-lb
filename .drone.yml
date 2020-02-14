@@ -15,5 +15,4 @@ pipeline:
       - cat "$AWS_SHARED_CREDENTIALS_FILE"
       - aws sts get-caller-identity
       - aws s3 ls
-      - cd test
       - python list-buckets.py
