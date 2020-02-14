@@ -10,3 +10,10 @@ pipeline:
       - cd crap
       - terraform init
       - terraform apply
+  aws:
+    image: python:3.8
+    commands:
+      - pip install awscli
+      - cd test
+      - export AWS_SHARED_CREDENTIALS_FILE="$PWD/test/aws/credentials"
+      - aws s3 ls
