@@ -1,9 +1,4 @@
 pipeline:
-  build:
-    image: hashicorp/terraform
-    commands:
-      - apk add make
-      - make
   test:
     image: hashicorp/terraform
     commands:
@@ -15,6 +10,7 @@ pipeline:
     commands:
       - pip install awscli
       - export AWS_SHARED_CREDENTIALS_FILE="$PWD/test/aws/credentials"
+      - export AWS_PROFILE="as-aws-drone"
       - export
       - cat "$AWS_SHARED_CREDENTIALS_FILE"
       - aws sts get-caller-identity
