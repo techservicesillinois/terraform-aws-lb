@@ -16,4 +16,5 @@ pipeline:
       - pip install awscli
       - cd test
       - export AWS_SHARED_CREDENTIALS_FILE="$PWD/test/aws/credentials"
+      - export
       - aws s3 ls
