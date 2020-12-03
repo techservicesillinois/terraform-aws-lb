@@ -7,8 +7,8 @@ resource "aws_lb_listener" "default" {
   load_balancer_arn = element(concat(aws_lb.default.*.arn, aws_lb.user.*.arn), 0)
   port              = local.ports[count.index]["port"]
   protocol          = local.ports[count.index]["protocol"]
-  ssl_policy        = local.ports[count.index]["protocol"] == "HTTPS" ? lookup(local.ports[count.index], "ssl_policy", var.ssl_policy) : ""
-  certificate_arn   = local.ports[count.index]["protocol"] == "HTTPS" ? lookup(local.ports[count.index], "certificate_arn", var.certificate_arn) : ""
+  ssl_policy        = local.is_alb ? (local.ports[count.index]["protocol"] == "HTTPS" ? lookup(local.ports[count.index], "ssl_policy", var.ssl_policy) : "") : null
+  certificate_arn   = local.is_alb ? (local.ports[count.index]["protocol"] == "HTTPS" ? lookup(local.ports[count.index], "certificate_arn", var.certificate_arn) : "") : null
 
   default_action {
     target_group_arn = aws_lb_target_group.default.arn

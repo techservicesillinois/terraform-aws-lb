@@ -58,6 +58,12 @@ variable "ip_address_type" {
   default     = "ipv4"
 }
 
+variable "load_balancer_type" {
+  description = "The type of load balancer to create. Possible values are application, gateway, or network. The default value is application."
+  type        = string
+  default     = "application"
+}
+
 variable "tags" {
   description = "Tags to be applied to resources where supported"
   type        = map(string)

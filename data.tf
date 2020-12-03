@@ -22,3 +22,7 @@ data "aws_route53_zone" "selected" {
   name   = var.alias[count.index]["domain"]
   vpc_id = var.internal ? data.aws_vpc.selected.id : null
 }
+
+locals {
+  is_alb = (var.load_balancer_type == "application") ? true : false
+}

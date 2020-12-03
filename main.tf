@@ -1,16 +1,22 @@
-resource "aws_lb" "default" {
-  count           = length(keys(var.access_logs)) == 0 ? 1 : 0
-  name            = var.name
-  internal        = var.internal
-  security_groups = concat(var.security_groups, [aws_security_group.default.id])
-  subnets         = data.aws_subnet_ids.selected.ids
-  idle_timeout    = var.idle_timeout
+locals {
+  security_groups = local.is_alb ? concat(var.security_groups, [aws_security_group.default[0].id]) : null
+}
 
-  access_logs {
-    bucket  = "log-${data.aws_region.current.name}-${data.aws_caller_identity.current.account_id}"
-    prefix  = "lb"
-    enabled = true
-  }
+resource "aws_lb" "default" {
+  count              = length(keys(var.access_logs)) == 0 ? 1 : 0
+  name               = var.name
+  internal           = var.internal
+  security_groups    = local.security_groups
+  subnets            = data.aws_subnet_ids.selected.ids
+  idle_timeout       = var.idle_timeout
+  load_balancer_type = var.load_balancer_type
+
+  # FIXME: This needs to be addressed.
+  # access_logs {
+  #   bucket  = "log-${data.aws_region.current.name}-${data.aws_caller_identity.current.account_id}"
+  #   prefix  = "lb"
+  #   enabled = true
+  # }
 
   tags = var.tags
 
@@ -20,13 +26,15 @@ resource "aws_lb" "default" {
 }
 
 resource "aws_lb" "user" {
-  count           = length(keys(var.access_logs)) != 0 ? 1 : 0
-  name            = var.name
-  internal        = var.internal
-  security_groups = concat(var.security_groups, [aws_security_group.default.id])
-  subnets         = data.aws_subnet_ids.selected.ids
-  idle_timeout    = var.idle_timeout
+  count              = length(keys(var.access_logs)) != 0 ? 1 : 0
+  name               = var.name
+  internal           = var.internal
+  security_groups    = local.security_groups
+  subnets            = data.aws_subnet_ids.selected.ids
+  idle_timeout       = var.idle_timeout
+  load_balancer_type = var.load_balancer_type
 
+  # FIXME: This needs to be addressed.
   dynamic "access_logs" {
     for_each = [var.access_logs]
     content {
