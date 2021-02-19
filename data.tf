@@ -23,6 +23,9 @@ data "aws_route53_zone" "selected" {
   vpc_id = var.internal ? data.aws_vpc.selected.id : null
 }
 
+# TODO: We currently support only application and network. This needs to be
+# documented and validated.
+
 locals {
   is_alb = (var.load_balancer_type == "application") ? true : false
 }

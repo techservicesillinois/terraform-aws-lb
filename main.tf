@@ -1,3 +1,6 @@
+# TODO: We currently support only application and network. This needs to be
+# documented and validated.
+
 locals {
   security_groups = local.is_alb ? concat(var.security_groups, [aws_security_group.default[0].id]) : null
 }

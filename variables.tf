@@ -28,7 +28,7 @@ variable "access_logs" {
 }
 
 variable "vpc" {
-  description = "Name of VPC to use"
+  description = "Name of VPC in which LB resides"
 }
 
 variable "tier" {
@@ -58,6 +58,9 @@ variable "ip_address_type" {
   default     = "ipv4"
 }
 
+# TODO: We currently support only application and network. This needs to be
+# documented and validated.
+
 variable "load_balancer_type" {
   description = "The type of load balancer to create. Possible values are application, gateway, or network. The default value is application."
   type        = string
@@ -73,9 +76,9 @@ variable "tags" {
 # Listener arguments
 
 variable "ports" {
-  description = "Keys: port, protocol, ssl_policy, certificate_arn. Values: 80, HTTP, ..."
-  type        = list(map(any))
-  default     = []
+  description = "Keys: protocol, ssl_policy, certificate_arn. Values: 80, HTTP, ..."
+  type        = map(map(any))
+  default     = {}
 }
 
 variable "secure_ports" {
