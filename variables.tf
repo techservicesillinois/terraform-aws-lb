@@ -76,7 +76,7 @@ variable "tags" {
 # Listener arguments
 
 variable "ports" {
-  description = "Keys: protocol, ssl_policy, certificate_arn. Values: 80, HTTP, ..."
+  description = "Keys: protocol, ssl_policy, certificate_arn. Values: HTTP, ..."
   type        = map(map(any))
   default     = {}
 }
