@@ -26,7 +26,7 @@ output "fqdn" {
 
 output "listener_arns" {
   description = "Listener ARNs."
-  value       = [{for listener in aws_lb_listener.default : listener.port => listener.arn}]
+  value       = [{ for listener in aws_lb_listener.default : listener.port => listener.arn }]
 }
 
 output "security_group_id" {
