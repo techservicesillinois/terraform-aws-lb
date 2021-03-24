@@ -1,8 +1,9 @@
 # lb
 
-[![Build Status](https://drone.techservices.illinois.edu/api/badges/techservicesillinois/terraform-aws-lb/status.svg)](https://drone.techservices.illinois.edu/techservicesillinois/terraform-aws-lb)
+[![Terraform actions status](https://github.com/techservicesillinois/terraform-aws-lb/workflows/terraform/badge.svg)](https://github.com/techservicesillinois/terraform-aws-lb/actions)
 
-Provides an Application Load Balancer.
+Provides a load balancer, which may be either an application or
+network load balancers.
 
 Example Usage
 -----------------
@@ -27,18 +28,17 @@ module "lb_name" {
     }
   ]
 
-  ports = [
-    {
-      port             = 443
-      protocol         = "HTTPS" 
+  ports = {
+    443 = {
+      protocol = "HTTPS" 
     },
-    {
-      port             = 80
-      protocol         = "HTTP" 
+
+    80 = {
+      protocol = "HTTP" 
     }    
-  ]
+  }
   
-  certificate_arn  = "certificate_arn_name"
+  certificate_arn  = "certificate_arn"
   ssl_policy       = "ssl_policy_name" 
 }
 ```
@@ -65,7 +65,7 @@ module "lb_name" {
     {
       port             = "port_number"
       protocol         = "protocol_name 
-      certificate_arn  = "certificate_arn_name"
+      certificate_arn  = "certificate_arn"
       ssl_policy       = "ssl_policy_name"
     }
   ]  
