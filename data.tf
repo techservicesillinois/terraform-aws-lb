@@ -29,3 +29,23 @@ data "aws_route53_zone" "selected" {
 locals {
   is_alb = (var.load_balancer_type == "application") ? true : false
 }
+
+module "certificate" {
+  # TODO: Should add count to handle [stupid] case where no aliases exist.
+  source = "git@github.com:techservicesillinois/terraform-aws-acm-certificate"
+
+  hostname = var.alias[0]["hostname"]
+  domain   = var.alias[0]["domain"]
+
+# subject_alternative_names = length(local.san) > 0 ? local.san : null
+# subject_alternative_names = local.san
+}
+
+locals {
+  san = (length(var.alias) > 1) ? [for a in slice(var.alias, 1, length(var.alias)) : format("%s.%s", a["hostname"], a["domain"])] : []
+}
+
+output "subject_alternative_names" {
+  value = local.san
+}
+
