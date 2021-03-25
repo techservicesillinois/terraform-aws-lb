@@ -37,15 +37,12 @@ module "certificate" {
   hostname = var.alias[0]["hostname"]
   domain   = var.alias[0]["domain"]
 
-# subject_alternative_names = length(local.san) > 0 ? local.san : null
-# subject_alternative_names = local.san
+  # subject_alternative_names = length(local.san) > 0 ? local.san : null
+  # subject_alternative_names = local.san
 }
 
-locals {
-  san = (length(var.alias) > 1) ? [for a in slice(var.alias, 1, length(var.alias)) : format("%s.%s", a["hostname"], a["domain"])] : []
-}
-
-output "subject_alternative_names" {
-  value = local.san
-}
-
+# FIXME: Fix this if we ever do a cleanup of subject_alternative_names.
+#
+#locals {
+# san = (length(var.alias) > 1) ? [for a in slice(var.alias, 1, length(var.alias)) : format("%s.%s", a["hostname"], a["domain"])] : []
+#}
