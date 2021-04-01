@@ -24,10 +24,10 @@ output "fqdn" {
   value       = aws_route53_record.default.*.fqdn
 }
 
-#output "listener_arns" {
-# description = "Listener ARNs."
-# value       = [{ for listener in aws_lb_listener.default : listener.port => listener.arn }]
-#}
+output "listener_arns" {
+  description = "Listener ARNs."
+  value       = [{ for listener in aws_lb_listener.default : listener.port => listener.arn }]
+}
 
 output "security_group_id" {
   description = "Default security group created for the load balancer."
