@@ -1,6 +1,6 @@
 locals {
   # TODO: Make local variables for the Route 53 record FQDN itself.
-  certificate_arn = module.certificate[aws_route53_record.default[0].fqdn].arn
+  certificate_arn = local.needs_certificate ? module.lb_certificate[aws_route53_record.default[0].fqdn].arn : null
 }
 
 resource "aws_lb_listener" "default" {

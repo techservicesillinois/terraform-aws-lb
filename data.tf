@@ -31,7 +31,7 @@ locals {
   needs_certificate = local.is_alb && ! var.internal
 }
 
-module "certificate" {
+module "lb_certificate" {
   # TODO: Should add count to handle [stupid] case where no aliases exist.
   source = "git@github.com:techservicesillinois/terraform-aws-acm-certificate"
 
