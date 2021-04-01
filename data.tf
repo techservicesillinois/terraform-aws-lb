@@ -35,7 +35,7 @@ module "certificate" {
   # TODO: Should add count to handle [stupid] case where no aliases exist.
   source = "git@github.com:techservicesillinois/terraform-aws-acm-certificate"
 
-  for_each = local.needs_certificate ? toset([""]) : toset([])
+  for_each = local.needs_certificate ? toset([aws_route53_record.default[0].fqdn]) : toset([])
   hostname = var.alias[0]["hostname"]
   domain   = var.alias[0]["domain"]
 

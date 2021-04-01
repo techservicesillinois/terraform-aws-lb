@@ -15,7 +15,7 @@ resource "aws_lb" "default" {
 
   # FIXME: This needs to be reviewed.
   dynamic "access_logs" {
-  # for_each = [var.access_logs]
+    # for_each = [var.access_logs]
     for_each = var.access_logs
     content {
       bucket  = lookup(each.value, "bucket")
