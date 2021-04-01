@@ -1,22 +1,22 @@
 output "arn" {
   description = "Load balancer ARN."
-  value       = element([for lb in concat(aws_lb.default, aws_lb.user) : lb.arn], 0)
+  value       = aws_lb.default.arn
 }
 
 output "arn_suffix" {
   description = "ARN suffix for use with CloudWatch metrics."
-  value       = element([for lb in concat(aws_lb.default, aws_lb.user) : lb.arn_suffix], 0)
+  value       = aws_lb.default.arn_suffix
 }
 
 output "dns_name" {
   description = "DNS name of the load balancer."
-  value       = element(concat(aws_lb.default.*.dns_name, aws_lb.user.*.dns_name), 0)
+  value       = aws_lb.default.dns_name
 }
 
 # TODO: Need to figure out why this does not work
 #output "canonical_hosted_zone_id" {
 #  description = "The canonical hosted zone ID of the load balancer."
-#  value       = "${element(concat(aws_lb.default.*.canonical_hosted_zone_id, aws_lb.user.*.canonical_hosted_zone_id), 0)}"
+#  value       = aws_lb.default.canonical_hosted_zone_id
 #}
 
 output "fqdn" {
@@ -41,5 +41,5 @@ output "target_group_arn" {
 
 output "zone_id" {
   description = "Canonical hosted zone ID of the load balancer (to be used in a Route 53 alias record)."
-  value       = element(concat(aws_lb.default.*.zone_id, aws_lb.user.*.zone_id), 0)
+  value       = aws_lb.default.zone_id
 }

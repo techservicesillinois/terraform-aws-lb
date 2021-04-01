@@ -89,7 +89,7 @@ variable "secure_ports" {
 
 variable "ssl_policy" {
   description = "Name of the SSL Policy for the listener. Required if protocol is HTTPS"
-  default     = ""
+  default     = null
 }
 
 variable "certificate_arn" {
