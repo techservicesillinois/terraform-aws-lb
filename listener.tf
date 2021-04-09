@@ -17,15 +17,3 @@ resource "aws_lb_listener" "default" {
     type             = "forward"
   }
 }
-
-output "zzz_needs_certificate" {
-  value = local.needs_certificate
-}
-
-output "zzz_internal" {
-  value = var.internal
-}
-
-output "zzz_certificate" {
-  value = local.certificate_arn
-}

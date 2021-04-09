@@ -28,6 +28,7 @@ data "aws_route53_zone" "selected" {
 
 locals {
   is_alb            = (var.load_balancer_type == "application") ? true : false
+  is_nlb            = (var.load_balancer_type == "network") ? true : false
   needs_certificate = local.is_alb && ! var.internal
 }
 

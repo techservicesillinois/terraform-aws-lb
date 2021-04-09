@@ -5,11 +5,32 @@ locals {
   security_groups = local.is_alb ? concat(var.security_groups, [aws_security_group.default[0].id]) : null
 }
 
+# TODO: EIP is apparently needed for NLBs, which implies that this IP is
+# public. Figure out more about this.
+
+# FIXME: For an NLB, create one EIP for each subnet in this tier.
+# First, is this # necessary?
+# Second, note that this code will need modification for internal ELBs.
+
+resource "aws_eip" "default" {
+  for_each = local.is_nlb ? toset(data.aws_subnet_ids.selected.ids) : toset()
+  tags     = merge({ Name = var.name }, var.tags)
+}
+
 resource "aws_lb" "default" {
-  name               = var.name
-  internal           = var.internal
-  security_groups    = local.security_groups
-  subnets            = data.aws_subnet_ids.selected.ids
+  name            = var.name
+  internal        = var.internal
+  security_groups = local.security_groups
+  subnets         = local.is_alb ? data.aws_subnet_ids.selected.ids : null
+
+  dynamic "subnet_mapping" {
+    for_each = local.is_nlb ? toset(data.aws_subnet_ids.selected.ids) : toset()
+    content {
+      subnet_id     = subnet_mapping.value
+      allocation_id = aws_eip.default[subnet_mapping.value].id
+    }
+  }
+
   idle_timeout       = var.idle_timeout
   load_balancer_type = var.load_balancer_type
 

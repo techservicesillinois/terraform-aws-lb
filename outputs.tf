@@ -19,6 +19,24 @@ output "dns_name" {
 #  value       = aws_lb.default.canonical_hosted_zone_id
 #}
 
+# TODO: A possible improvement would be to use the subnet name rather
+# than ID as the key in this output.
+
+output "eip_public_dns" {
+  value = local.is_nlb ? tomap({
+    for subnet, eip in aws_eip.default : subnet => eip.public_dns
+  }) : null
+}
+
+# TODO: A possible improvement would be to use the subnet name rather
+# than ID as the key in this output.
+
+output "eip_public_ip" {
+  value = local.is_nlb ? tomap({
+    for subnet, eip in aws_eip.default : subnet => eip.public_ip
+  }) : null
+}
+
 output "fqdn" {
   description = "Fully qualified domain names."
   value       = aws_route53_record.default.*.fqdn
@@ -42,4 +60,16 @@ output "target_group_arn" {
 output "zone_id" {
   description = "Canonical hosted zone ID of the load balancer (to be used in a Route 53 alias record)."
   value       = aws_lb.default.zone_id
+}
+
+output "zzz_needs_certificate" {
+  value = local.needs_certificate
+}
+
+output "zzz_internal" {
+  value = var.internal
+}
+
+output "zzz_certificate_arn" {
+  value = local.certificate_arn
 }
