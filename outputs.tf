@@ -49,7 +49,7 @@ output "listener_arns" {
 
 output "security_group_id" {
   description = "Default security group created for the load balancer."
-  value       = local.is_alb ? aws_security_group.default[0].id : null
+  value       = local.is_alb ? aws_security_group.default.id : null
 }
 
 output "target_group_arn" {

@@ -4,8 +4,6 @@
 #    https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html
 #
 resource "aws_security_group" "default" {
-  count = local.is_alb ? 1 : 0
-
   description = format("%s load balancer security group", var.name)
   name        = var.name
   vpc_id      = data.aws_vpc.selected.id
@@ -39,7 +37,7 @@ resource "aws_security_group_rule" "internet_in" {
   to_port           = each.key
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = aws_security_group.default[0].id
+  security_group_id = aws_security_group.default.id
 }
 
 # Security group rule for internal LBs allows inbound connections from VPC only.
@@ -53,7 +51,7 @@ resource "aws_security_group_rule" "vpc_in" {
   to_port           = each.key
   protocol          = "tcp"
   cidr_blocks       = [data.aws_vpc.selected.cidr_block]
-  security_group_id = aws_security_group.default[0].id
+  security_group_id = aws_security_group.default.id
 }
 
 # Allows inbound ICMP traffic.
@@ -70,7 +68,7 @@ resource "aws_security_group_rule" "allow_icmp" {
   protocol    = "icmp"
   cidr_blocks = ["0.0.0.0/0"]
 
-  security_group_id = aws_security_group.default[0].id
+  security_group_id = aws_security_group.default.id
 }
 
 # Resource to support application specific ports on the internal load balancer
@@ -86,5 +84,5 @@ resource "aws_security_group_rule" "port_in" {
   from_port                = var.secure_ports[count.index]["port"]
   to_port                  = var.secure_ports[count.index]["port"]
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.default[0].id
+  security_group_id        = aws_security_group.default.id
 }
