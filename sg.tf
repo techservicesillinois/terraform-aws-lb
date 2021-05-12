@@ -28,8 +28,8 @@ resource "aws_security_group" "secure" {
 # Allow inbound TCP connections on listener port only.
 
 resource "aws_security_group_rule" "internet_in" {
-  # Used for non-internal ALBs.
-  for_each = local.is_alb ? (var.internal ? {} : var.ports) : {}
+  # Used for non-internal LBs.
+  for_each = var.internal ? {} : var.ports
 
   description       = format("Allow inbound TCP connections to load balancer %s on listener port %d", var.name, each.key)
   type              = "ingress"
@@ -43,7 +43,7 @@ resource "aws_security_group_rule" "internet_in" {
 # Security group rule for internal LBs allows inbound connections from VPC only.
 
 resource "aws_security_group_rule" "vpc_in" {
-  for_each = local.is_alb ? (var.internal ? var.ports : {}) : {}
+  for_each = var.internal ? {} : var.ports
 
   description       = format("Allow inbound TCP connections from VPC %s to %s on listener port %s", var.vpc, var.name, each.key)
   type              = "ingress"
@@ -59,8 +59,6 @@ resource "aws_security_group_rule" "vpc_in" {
 # https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
 
 resource "aws_security_group_rule" "allow_icmp" {
-  count = local.is_alb ? 1 : 0
-
   description = format("Allow inbound ICMP traffic to load balancer %s", var.name)
   type        = "ingress"
   from_port   = -1 # Allow any ICMP type number
