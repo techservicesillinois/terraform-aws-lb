@@ -13,7 +13,7 @@ locals {
 # Second, note that this code will need modification for internal ELBs.
 
 resource "aws_eip" "default" {
-  for_each = local.is_nlb ? toset(data.aws_subnet_ids.selected.ids) : toset()
+  for_each = toset(local.is_nlb ? data.aws_subnet_ids.selected.ids : [])
   tags     = merge({ Name = var.name }, var.tags)
 }
 
@@ -24,7 +24,7 @@ resource "aws_lb" "default" {
   subnets         = local.is_alb ? data.aws_subnet_ids.selected.ids : null
 
   dynamic "subnet_mapping" {
-    for_each = local.is_nlb ? toset(data.aws_subnet_ids.selected.ids) : toset()
+    for_each = toset(local.is_nlb ? data.aws_subnet_ids.selected.ids : [])
     content {
       subnet_id     = subnet_mapping.value
       allocation_id = aws_eip.default[subnet_mapping.value].id
@@ -34,7 +34,9 @@ resource "aws_lb" "default" {
   idle_timeout       = var.idle_timeout
   load_balancer_type = var.load_balancer_type
 
-  # FIXME: This needs to be reviewed.
+  # FIXME: This needs to be reviewed; currently must set -target on
+  # aws_route53_record.default[0].
+
   dynamic "access_logs" {
     # for_each = [var.access_logs]
     for_each = var.access_logs
