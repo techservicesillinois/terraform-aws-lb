@@ -6,7 +6,7 @@
 resource "aws_security_group" "default" {
   description = "security group for ${var.name} ALB"
   name        = var.name
-  vpc_id      = data.aws_vpc.selected.id
+  vpc_id      = module.get-subnets.vpc.id
   tags        = merge({ Name = var.name }, var.tags)
 }
 
@@ -18,7 +18,7 @@ resource "aws_security_group" "secure" {
     "",
   )
   name   = var.secure_ports[count.index]["security_group"]
-  vpc_id = data.aws_vpc.selected.id
+  vpc_id = module.get-subnets.vpc.id
   tags   = merge({ Name = var.name }, var.tags)
 }
 
@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "vpc_in" {
   from_port         = var.ports[count.index]["port"]
   to_port           = var.ports[count.index]["port"]
   protocol          = "tcp"
-  cidr_blocks       = [data.aws_vpc.selected.cidr_block]
+  cidr_blocks       = [module.get-subnets.subnets.cidr_block]
   security_group_id = aws_security_group.default.id
 }
 

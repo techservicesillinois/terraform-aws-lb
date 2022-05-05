@@ -27,12 +27,12 @@ variable "access_logs" {
   default     = {}
 }
 
-variable "vpc" {
-  description = "Name of VPC to use"
+variable "subnet_type" {
+  description = "Subnet type (e.g., 'campus', 'private', 'public') for resource placement"
 }
 
-variable "tier" {
-  description = "Name of subnet tier (e.g., public, private, nat)"
+variable "vpc" {
+  description = "Name of VPC for resource placement"
 }
 
 # TODO: missing subnets
