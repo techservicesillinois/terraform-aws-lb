@@ -7,13 +7,13 @@
 # This is a dummy target_group for the default route for each created
 # listener. This is not intended to be used except for delivering
 # error messages.
+
 resource "aws_lb_target_group" "default" {
-  name = var.name
-
-  port     = 80
-  protocol = "HTTP"
-
+  name        = var.name
+  port        = 80
+  protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = data.aws_vpc.selected.id
-  tags        = merge({ Name = var.name }, var.tags)
+  vpc_id      = module.get-subnets.vpc.id
+
+  tags = merge({ Name = var.name }, var.tags)
 }

@@ -3,7 +3,7 @@ resource "aws_lb" "default" {
   name            = var.name
   internal        = var.internal
   security_groups = concat(var.security_groups, [aws_security_group.default.id])
-  subnets         = data.aws_subnet_ids.selected.ids
+  subnets         = module.get-subnets.subnets.ids
   idle_timeout    = var.idle_timeout
 
   access_logs {
@@ -24,7 +24,7 @@ resource "aws_lb" "user" {
   name            = var.name
   internal        = var.internal
   security_groups = concat(var.security_groups, [aws_security_group.default.id])
-  subnets         = data.aws_subnet_ids.selected.ids
+  subnets         = module.get-subnets.subnets.ids
   idle_timeout    = var.idle_timeout
 
   dynamic "access_logs" {

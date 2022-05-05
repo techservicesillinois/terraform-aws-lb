@@ -13,9 +13,9 @@ Example Usage
 module "lb_name" {
   source = "git@github.com:techservicesillinois/terraform-aws-lb"
 
-  name = "lb_name"
-  tier = "public"
-  vpc  = "vpc_name"
+  name        = "lb_name"
+  subnet_type = "public"
+  vpc         = "vpc_name"
 
   alias = [ 
     {
@@ -48,11 +48,10 @@ module "lb_name" {
 module "lb_name" {
   source = "git@github.com:techservicesillinois/terraform-aws-lb"
 
-  name     = "lb_name"
-  internal = true
-  
-  tier     = "nat"
-  vpc      = "vpc_name"
+  name        = "lb_name"
+  internal    = true
+  subnet_type = "nat"
+  vpc         = "vpc_name"
 
   alias = [
     {
@@ -86,8 +85,7 @@ or end with a hyphen.
 * `vpc` - (Required) The name of the virtual private cloud to be
 associated with the load balancer.
 
-* `tier` - (Required) A subnet tier tag (e.g., public, private,
-nat) to determine subnets to be associated with the load balancer.
+* `subnet_type` - (Required) Subnet type (e.g., 'campus', 'private', 'public') for resource placement.
 
 * `ports` - (Required) A list of [Ports](#ports) blocks. Ports
 documented below.
