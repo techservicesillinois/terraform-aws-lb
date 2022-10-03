@@ -2,7 +2,7 @@
 # Recommended security groups 
 #
 #    https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html
-#
+
 resource "aws_security_group" "default" {
   description = "security group for ${var.name} ALB"
   name        = var.name
@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "vpc_in" {
   from_port         = var.ports[count.index]["port"]
   to_port           = var.ports[count.index]["port"]
   protocol          = "tcp"
-  cidr_blocks       = [module.get-subnets.subnets.cidr_block]
+  cidr_blocks       = [module.get-subnets.vpc.cidr_block]
   security_group_id = aws_security_group.default.id
 }
 
