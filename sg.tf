@@ -4,7 +4,7 @@
 #    https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-update-security-groups.html
 
 resource "aws_security_group" "default" {
-  description = "security group for ${var.name} ALB"
+  description = format("LB %s security group", var.name)
   name        = var.name
   vpc_id      = module.get-subnets.vpc.id
   tags        = merge({ Name = var.name }, var.tags)
@@ -12,6 +12,7 @@ resource "aws_security_group" "default" {
 
 resource "aws_security_group" "secure" {
   count = length(var.secure_ports)
+
   description = lookup(
     var.secure_ports[count.index],
     "security_group_description",
@@ -26,8 +27,9 @@ resource "aws_security_group" "secure" {
 
 resource "aws_security_group_rule" "internet_in" {
   # Should be activated if internal is FALSE.
-  count             = var.internal ? 0 : length(var.ports)
-  description       = "Allow internet TCP connections to ALB on listener port only"
+  count = var.internal ? 0 : length(var.ports)
+
+  description       = format("Allow inbound TCP traffic to LB port %d", var.ports[count.index]["port"])
   type              = "ingress"
   from_port         = var.ports[count.index]["port"]
   to_port           = var.ports[count.index]["port"]
@@ -38,8 +40,9 @@ resource "aws_security_group_rule" "internet_in" {
 
 resource "aws_security_group_rule" "vpc_in" {
   # Should be activated if internal is TRUE.
-  count             = var.internal ? length(var.ports) : 0
-  description       = "Allow VPC TCP connections to ALB on listener port only"
+  count = var.internal ? length(var.ports) : 0
+
+  description       = format("Allow inbound TCP traffic to LB port %d from VPC", var.ports[count.index]["port"])
   type              = "ingress"
   from_port         = var.ports[count.index]["port"]
   to_port           = var.ports[count.index]["port"]
@@ -53,8 +56,9 @@ resource "aws_security_group_rule" "vpc_in" {
 
 resource "aws_security_group_rule" "port_in" {
   # Should be activated if security_group_ports has a port.
-  count                    = length(var.secure_ports)
-  description              = "Allow connections to ALB on listener port using the security group"
+  count = length(var.secure_ports)
+
+  description              = format("Allow inbound TCP traffic to LB port %d from %s security group", var.secure_ports[count.index]["port"], aws_security_group.default.name)
   type                     = "ingress"
   source_security_group_id = element(aws_security_group.secure.*.id, count.index)
   from_port                = var.secure_ports[count.index]["port"]
@@ -67,7 +71,7 @@ resource "aws_security_group_rule" "port_in" {
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group-ingress.html
 # https://www.iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
 resource "aws_security_group_rule" "allow_icmp" {
-  description = "Allow inbound ICMP traffic to ALB ${var.name}"
+  description = "Allow inbound ICMP traffic"
 
   type        = "ingress"
   from_port   = -1 # Allow any ICMP type number
