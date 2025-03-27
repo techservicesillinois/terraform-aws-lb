@@ -5,7 +5,7 @@ data "aws_caller_identity" "current" {}
 # FIXME: Replace reference to branch with reference to tagged version.
 
 module "get-subnets" {
-  source = "github.com/techservicesillinois/terraform-aws-util//modules/get-subnets?ref=v3.0.4"
+  source = "github.com/techservicesillinois/terraform-aws-util//modules/get-subnets?ref=v3.0.5"
 
   subnet_type = var.subnet_type
   vpc         = var.vpc
