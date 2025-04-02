@@ -8,6 +8,11 @@ resource "aws_security_group" "default" {
   name        = var.name
   vpc_id      = module.get-subnets.vpc.id
   tags        = merge({ Name = var.name }, var.tags)
+
+  # Avoid forced replacement of security group just to change description.
+  lifecycle {
+    ignore_changes = [description]
+  }
 }
 
 resource "aws_security_group" "secure" {
@@ -21,6 +26,11 @@ resource "aws_security_group" "secure" {
   name   = var.secure_ports[count.index]["security_group"]
   vpc_id = module.get-subnets.vpc.id
   tags   = merge({ Name = var.name }, var.tags)
+
+  # Avoid forced replacement of security group just to change description.
+  lifecycle {
+    ignore_changes = [description]
+  }
 }
 
 # Allow inbound TCP connections on listener port only.
