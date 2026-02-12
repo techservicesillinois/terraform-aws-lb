@@ -7,7 +7,7 @@ resource "aws_lb" "default" {
   idle_timeout    = var.idle_timeout
 
   access_logs {
-    bucket  = "log-${data.aws_region.current.name}-${data.aws_caller_identity.current.account_id}"
+    bucket  = "log-${data.aws_region.current.region}-${data.aws_caller_identity.current.account_id}"
     prefix  = "lb"
     enabled = true
   }
